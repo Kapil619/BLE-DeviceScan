@@ -1,69 +1,91 @@
+import HeatMap from '@ncuhomeclub/react-native-heatmap';
 import React from 'react';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  BarChart,
+  LineChart,
+  PieChart,
+  RadarChart,
+} from 'react-native-gifted-charts';
+import Header from '../components/Header';
 
-const dummyData = [
-  {x: 'Mon', y: 'Morning', value: 2},
-  {x: 'Mon', y: 'Evening', value: 6},
-  {x: 'Tue', y: 'Morning', value: 3},
-  {x: 'Tue', y: 'Evening', value: 7},
-  {x: 'Wed', y: 'Morning', value: 1},
-  {x: 'Wed', y: 'Evening', value: 4},
-];
+const Chart = () => {
+  const data = [
+    12, 423, 42, 0, 0, 0, 0, 23, 0, 3, 0, 0, 0, 34, 35, 34, 23, 23, 35, 34, 10,
+    2, 4, 6, 2, 5, 15, 0,
+  ];
+  const data2 = [{value: 50}, {value: 80}, {value: 90}, {value: 70}];
 
-export default function Chart({navigation}: any) {
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Heatmap Chart</Text>
+    <>
+      <Header title="Charts/Graphs" />
+      <ScrollView
+        style={styles.scrollContainer}
+        contentContainerStyle={styles.contentContainer}>
+        {/* Bar Chart */}
+        <BarChart isAnimated data={data2} />
+        <ChartDivider title="Bar Chart" />
 
-      {/* Simple Grid as a Heatmap */}
-      <View style={styles.grid}>
-        {dummyData.map((item, index) => (
-          <View
-            key={index}
-            style={[
-              styles.cell,
-              {backgroundColor: `rgba(255, 0, 0, ${item.value / 10})`},
-            ]}>
-            <Text style={styles.cellText}>
-              {item.x} {item.y}
-            </Text>
-          </View>
-        ))}
-      </View>
+        {/* Line Chart */}
+        <LineChart isAnimated data={data2} />
+        <ChartDivider title="Line Chart" />
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('BLE')}>
-        <Text style={styles.buttonText}>Go to BLE Screen</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        {/* Pie Chart */}
+        <PieChart isAnimated data={data2} />
+        <ChartDivider title="Pie Chart" />
+
+        {/* Radar Chart */}
+        <RadarChart isAnimated data={[50, 80, 90, 70]} />
+        <ChartDivider title="Radar Chart" />
+
+        {/* Heat Map */}
+        <HeatMap
+          xLabels={['1', '2', '3', '4']}
+          yLabels={['1', '2', '3', '4']}
+          shape="circle"
+          direction="horizontal"
+          data={data}
+          yNumber={5}
+        />
+        <ChartDivider title="Heat Map" />
+      </ScrollView>
+    </>
   );
-}
+};
+
+const ChartDivider = ({title}: {title: string}) => (
+  <View style={styles.dividerContainer}>
+    <View style={styles.divider} />
+    <Text style={styles.dividerText}>{title}</Text>
+    <View style={styles.divider} />
+  </View>
+);
+
+export default Chart;
 
 const styles = StyleSheet.create({
-  container: {padding: 20, alignItems: 'center'},
-  title: {fontSize: 24, fontWeight: 'bold', marginBottom: 20},
-  grid: {flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'},
-  cell: {
-    width: 100,
-    height: 60,
-    margin: 5,
-    borderRadius: 8,
-    justifyContent: 'center',
+  scrollContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  contentContainer: {
+    padding: 20,
+    rowGap: 20,
+  },
+  dividerContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
+    marginVertical: 10,
   },
-  cellText: {color: '#fff', fontWeight: 'bold', textAlign: 'center'},
-  button: {
-    marginTop: 40,
-    padding: 12,
-    backgroundColor: '#007AFF',
-    borderRadius: 8,
+  divider: {
+    flex: 1,
+    height: 1,
+    backgroundColor: 'gray',
   },
-  buttonText: {color: '#fff', fontWeight: 'bold'},
+  dividerText: {
+    marginHorizontal: 10,
+    fontSize: 16,
+    color: 'black',
+    fontWeight: 'bold',
+  },
 });
